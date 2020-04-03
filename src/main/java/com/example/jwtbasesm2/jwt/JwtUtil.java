@@ -70,5 +70,6 @@ public class JwtUtil {
         System.out.println(jwt);
         String ss = "song";
         System.out.println(new String(Base64.getEncoder().encode(ss.getBytes())));
+        System.out.println(new String(Base64.getDecoder().decode("eyJhbGciOiJub25lIn0".getBytes())));
     }
 }
