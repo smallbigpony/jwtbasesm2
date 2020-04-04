@@ -6,33 +6,32 @@ import org.bouncycastle.crypto.signers.StandardDSAEncoding;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 
 public class SM2SignResult {
-    private byte[] signR;
-    private byte[] signS;
+    private BigInteger signR;
+    private BigInteger signS;
 
     public SM2SignResult() {
     }
 
-    public SM2SignResult(byte[] signR, byte[] signS) {
+    public SM2SignResult(BigInteger signR, BigInteger signS) {
         this.signR = signR;
         this.signS = signS;
     }
 
-    public byte[] getSignR() {
+    public BigInteger getSignR() {
         return signR;
     }
 
-    public byte[] getSignS() {
+    public BigInteger getSignS() {
         return signS;
     }
 
-    public byte[] mergeRS(){
-        byte[] ret = new byte[signR.length+signS.length];
-        System.arraycopy(signR, 0, ret, 0, signR.length);
-        System.arraycopy(signS, 0, ret, signR.length, signS.length);
-        return ret;
+    @Override
+    public String toString() {
+     return signR.toString(16)+"."+signS.toString(16);
     }
 
     public byte[] encodeStandardDSA() throws Exception {
@@ -52,14 +51,14 @@ public class SM2SignResult {
     }
 
     private byte[] encode(DSAEncoding dsaEncoding) throws Exception {
-        BigInteger bigIntegerSignR = new BigInteger(Hex.toHexString(getSignR()), 16);
-        BigInteger bigIntegerSignS = new BigInteger(Hex.toHexString(getSignS()), 16);
-        return dsaEncoding.encode(SM2Constants.SM2_ECC_N, bigIntegerSignR, bigIntegerSignS);
+       // BigInteger bigIntegerSignR = new BigInteger(Hex.toHexString(getSignR()), 16);
+        //BigInteger bigIntegerSignS = new BigInteger(Hex.toHexString(getSignS()), 16);
+        return dsaEncoding.encode(SM2Constants.SM2_ECC_N, signR, signS);
     }
 
     private void decode(DSAEncoding dsaEncoding, byte[] signDSAEncoding) throws Exception{
         BigInteger[] bigIntegers = dsaEncoding.decode(SM2Constants.SM2_ECC_N, signDSAEncoding);
-        this.signR = bigIntegers[0].toByteArray();
-        this.signS = bigIntegers[1].toByteArray();
+        this.signR = bigIntegers[0];
+        this.signS = bigIntegers[1];
     }
 }

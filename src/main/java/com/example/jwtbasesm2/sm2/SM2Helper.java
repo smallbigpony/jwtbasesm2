@@ -84,8 +84,8 @@ public class SM2Helper {
      * @throws Exception
      */
     public static boolean verifySign(byte[] input, SM2SignResult SM2SignResult, ECPublicKeyParameters ecPublicKeyParameters, byte[] ID) throws Exception{
-        BigInteger signR = new BigInteger(1, SM2SignResult.getSignR());
-        BigInteger signS = new BigInteger(1, SM2SignResult.getSignS());
+        BigInteger signR = SM2SignResult.getSignR();
+        BigInteger signS = SM2SignResult.getSignS();
         byte[] sign = StandardDSAEncoding.INSTANCE.encode(SM2Constants.SM2_ECC_N, signR, signS);
 
         SM2Signer signer = new SM2Signer();
@@ -98,5 +98,13 @@ public class SM2Helper {
         signer.init(false, param);
         signer.update(input, 0, input.length);
         return signer.verifySignature(sign);
+    }
+    public static void main(String[] args) throws Exception {
+        String message  = "song wen hao wu di";
+        SM2KeyPair sm2KeyPair = SM2KeyHelper.generateKeyPair();
+        String id = "123";
+        SM2SignResult sm2SignResult = sign(message.getBytes(),SM2KeyHelper.buildECPrivateKeyParameters(sm2KeyPair.getPrivateKey()),id.getBytes());
+        System.out.println(sm2SignResult);
+        System.out.println(verifySign(message.getBytes(),sm2SignResult,SM2KeyHelper.buildECPublicKeyParameters(sm2KeyPair.getPublicKeyX(),sm2KeyPair.getPublicKeyY()),id.getBytes()));
     }
 }
