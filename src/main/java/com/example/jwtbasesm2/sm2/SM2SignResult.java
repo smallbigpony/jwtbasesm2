@@ -21,6 +21,17 @@ public class SM2SignResult {
         this.signS = signS;
     }
 
+    public SM2SignResult(String sign) {
+        int index = sign.indexOf("|");
+        if(index <= 0){
+            throw new RuntimeException("signature is not right");
+        }
+        String sr = sign.substring(0,index);
+        String ss = sign.substring(index+1,sign.length());
+        this.signR = new BigInteger(sr,16);
+        this.signS = new BigInteger(ss,16);
+    }
+
     public BigInteger getSignR() {
         return signR;
     }
@@ -31,7 +42,7 @@ public class SM2SignResult {
 
     @Override
     public String toString() {
-     return signR.toString(16)+"."+signS.toString(16);
+     return signR.toString(16)+"|"+signS.toString(16);
     }
 
     public byte[] encodeStandardDSA() throws Exception {
