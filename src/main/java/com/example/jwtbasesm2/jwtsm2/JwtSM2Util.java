@@ -186,11 +186,11 @@ public class JwtSM2Util {
         Claims claims = parse(jwt,sm2KeyPair,id);
         System.out.println("sub:" + claims.getSubject());
         //更改jwt的一个字母，尝试验证
-        //String jwt_1 = "a"+jwt;
-        //Claims claims_1 = parse(jwt_1,sm2KeyPair,id);
+        /*String jwt_1 = "a"+jwt;
+        Claims claims_1 = parse(jwt_1,sm2KeyPair,id);*/
 
         //验证nbf
-        /*Date nbfDate_1 = new Date(System.currentTimeMillis()+60 * 30 * 1000L);
+        Date nbfDate_1 = new Date(System.currentTimeMillis()+60 * 30 * 1000L);
         Date now = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat(ISO_8601_FORMAT);
         System.out.println(sdf.format(nbfDate_1));
@@ -198,7 +198,7 @@ public class JwtSM2Util {
         System.out.println(now.before(nbfDate_1));
         String jwt_1 = creatSM2Jwt(id,sub,iss,nbfDate_1,ttlMillis,sm2KeyPair);
         Claims claims_1 = parse(jwt_1,sm2KeyPair,id);
-        System.out.println("sub:" + claims_1.getSubject());*/
+        System.out.println("sub:" + claims_1.getSubject());
 
         //验证exp
        /* Long ttlMillis_1 = 1000*10L;

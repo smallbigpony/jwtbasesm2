@@ -21,19 +21,20 @@ public class JwtUtil {
 
     /**
      * 创建未使用签名算法的jwt
-     * @param id jwt的唯一标识
-     * @param subject json数据
-     * @param iss 签发者
-     * @param nbfDate 定义在什么时间之前，该jwt都是不可用的.
+     *
+     * @param id        jwt的唯一标识
+     * @param subject   json数据
+     * @param iss       签发者
+     * @param nbfDate   定义在什么时间之前，该jwt都是不可用的.
      * @param ttlMillis 超时时间
      * @return jwt字符串
      */
-    public static String createJWT(String id, String subject,String iss, Date nbfDate,Long ttlMillis) {
+    public static String createJWT(String id, String subject, String iss, Date nbfDate, Long ttlMillis) {
         //定义jwt签名的算法
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.NONE;
         //将当前时间+超时时间
-        if(ttlMillis==null){
-            ttlMillis=JwtUtil.JWT_TTL;
+        if (ttlMillis == null) {
+            ttlMillis = JwtUtil.JWT_TTL;
         }
         Date nowDate = new Date(System.currentTimeMillis());
         long expMillis = nowDate.getTime() + ttlMillis;
@@ -55,6 +56,7 @@ public class JwtUtil {
 
     /**
      * 生成加密后的秘钥 secretKey
+     *
      * @return
      */
     public static SecretKey generalKey() {
@@ -62,6 +64,7 @@ public class JwtUtil {
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }
+
     public static Claims parseJWT(String jwt) throws Exception {
         SecretKey key = generalKey();  //签名秘钥，和生成的签名的秘钥一模一样
         Claims claims = Jwts.parser()  //得到DefaultJwtParser
@@ -70,16 +73,18 @@ public class JwtUtil {
         return claims;
     }
 
+
+
     public static void main(String[] args) throws Exception {
        /* String jwt = createJWT("swh", "8888", 60*60*1000L);
         System.out.println(jwt);
         String ss = "song";
         System.out.println(new String(Base64.getEncoder().encode(ss.getBytes())));
         System.out.println(new String(Base64.getDecoder().decode("eyJhbGciOiJIUzI1NiJ9".getBytes())));*/
-       Long now = System.currentTimeMillis();
-       Date nowDate = new Date(now);
-       System.out.println(now);
-       System.out.println(nowDate.getTime());
+        Long now = System.currentTimeMillis();
+        Date nowDate = new Date(now);
+        System.out.println(now);
+        System.out.println(nowDate.getTime());
         /*Thread.sleep(10L);
         try {
             Claims claims = parseJWT(jwt);
